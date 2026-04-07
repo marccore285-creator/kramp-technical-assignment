@@ -9,10 +9,12 @@ on:
 env:
   GCP_REGION: europe-west1
   SERVICE_NAME: product-info-aggregator
-  GCP_PROJECT_ID: your-gcp-project-id   # TODO: replace with your actual GCP project ID
+  GCP_PROJECT_ID: kramp-demo-492602
 
 jobs:
-  # ── Build & Test ─────────────────────────────────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # Build & Test
+  # ───────────────────────────────────────────────────────────────
   build-test:
     name: Build & Test
     runs-on: ubuntu-latest
@@ -39,7 +41,9 @@ jobs:
           path: target/surefire-reports/
           retention-days: 7
 
-  # ── Docker build & push (main branch only) ───────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # Build & Push Docker Image (main only)
+  # ───────────────────────────────────────────────────────────────
   docker-publish:
     name: Build & Push Docker Image
     runs-on: ubuntu-latest
@@ -60,13 +64,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Package JAR (skip tests — already ran above)
+      - name: Package JAR (skip tests)
         run: mvn clean package -DskipTests -q
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (WIF)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: cloud-run-deployer@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev --quiet
@@ -82,7 +87,9 @@ jobs:
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
 
-  # ── Deploy to Cloud Run (main branch only) ───────────────────────────────────
+  # ───────────────────────────────────────────────────────────────
+  # Deploy to Cloud Run (main only)
+  # ───────────────────────────────────────────────────────────────
   deploy:
     name: Deploy to Cloud Run
     runs-on: ubuntu-latest
@@ -93,10 +100,11 @@ jobs:
       id-token: write
 
     steps:
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (WIF)
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: projects/${{ env.GCP_PROJECT_ID }}/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: cloud-run-deployer@${{ env.GCP_PROJECT_ID }}.iam.gserviceaccount.com
 
       - name: Deploy to Cloud Run
         uses: google-github-actions/deploy-cloudrun@v2
