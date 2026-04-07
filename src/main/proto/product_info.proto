@@ -1,0 +1,58 @@
+syntax = "proto3";
+
+package kramp.aggregator;
+
+option java_package = "com.kramp.aggregator.proto";
+option java_outer_classname = "ProductInfoOuterClass";
+// Each message/service gets its own .java file (cleaner imports)
+option java_multiple_files = true;
+
+// Single RPC: aggregate product info from all upstream services
+service ProductInfoService {
+  rpc GetProductInfo(ProductInfoRequest) returns (ProductInfoResponse);
+}
+
+message ProductInfoRequest {
+  string product_id = 1;
+  string market     = 2;
+  string customer_id = 3; // optional; empty string means anonymous
+}
+
+message ProductInfoResponse {
+  string           product_id   = 1;
+  string           market       = 2;
+  CatalogInfo      catalog      = 3;
+  PricingInfo      pricing      = 4;
+  AvailabilityInfo availability = 5;
+  CustomerInfo     customer     = 6;
+}
+
+message CatalogInfo {
+  string              name        = 1;
+  string              description = 2;
+  map<string, string> specs       = 3;
+  repeated string     images      = 4;
+  string              status      = 5; // "OK" | "UNAVAILABLE"
+}
+
+message PricingInfo {
+  double base_price   = 1;
+  double discount     = 2;
+  double final_price  = 3;
+  string currency     = 4;
+  string status       = 5; // "OK" | "UNAVAILABLE"
+}
+
+message AvailabilityInfo {
+  int32  stock_level            = 1;
+  string warehouse              = 2;
+  int32  expected_delivery_days = 3;
+  string status                 = 4; // "OK" | "UNKNOWN"
+}
+
+message CustomerInfo {
+  string          customer_id  = 1;
+  string          segment      = 2;
+  repeated string preferences  = 3;
+  string          status       = 4; // "PERSONALIZED" | "DEFAULT"
+}

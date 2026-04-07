@@ -1,0 +1,15 @@
+target/
+.idea/
+*.iml
+.DS_Store
+*.class
+*.jar
+*.war
+*.log
+
+# Terraform state (never commit these)
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/*.tfvars
